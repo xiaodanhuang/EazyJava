@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaodanhuang.dao.TeacherDao">
+    <select id="teacherByCourse"  resultType="com.xiaodanhuang.entity.Course">
+        <!-- 教师端模块课程名称资源综合排序 -->
+        select
+        id,
+        courseStu,
+        courseName,
+        category,
+        courseTime
+        from course
+        where
+        course.teacherNum= #{teacherNum}
+    </select>
+    <select id="teacherByProclamation"  resultType="com.xiaodanhuang.entity.Course">
+        <!-- 教师端模块课程名称资源综合排序 -->
+        select
+        proclamation
+        from
+        course
+        where
+        id= #{id}
+    </select>
+    <update id="teacherCourseUpdate" parameterType="Course">
+        UPDATE
+        course
+        <trim prefix="SET" suffixOverrides=",">
+            <if  test="courseName != null  and courseName != ''">
+                courseName=#{courseName},
+            </if>
+            <if  test="category != null  and category != ''">
+                category=#{category},
+            </if>
+            <if  test="courseTime != null and courseTime != ''">
+                courseTime=#{courseTime}
+            </if>
+            where id=#{id}
+        </trim>
+    </update>
+    <select id="teacherByChapter"  resultType="com.xiaodanhuang.entity.Chapter">
+        <!-- 教师端模块章节名称资源综合排序 -->
+        select
+        id,
+        chapterName
+        from
+        chapter
+        where
+        courseId= #{courseId}
+    </select>
+    <insert id="teacherChapterAdd"  parameterType="Chapter">
+        insert
+        into
+        chapter(id,courseId,chapterName)
+        values
+        (#{id}, #{courseId},#{chapterName})
+    </insert>
+    <delete id="teacherChapterDelete" parameterType="int" >
+        DELETE
+        from
+        chapter
+        where
+        id=#{id}
+    </delete>
+    <update id="teacherChapterUpdate" parameterType="Course">
+        UPDATE
+        chapter
+        <trim prefix="SET" suffixOverrides=",">
+            <if  test="chapterName!= null  and chapterName != ''">
+            chapterName=#{chapterName}
+            </if>
+            where id=#{id}
+        </trim>
+    </update>
+    <update id="teacherProclamationUpdate" parameterType="Course">
+        UPDATE
+        course
+        <trim prefix="SET" suffixOverrides=",">
+            <if  test="proclamation!= null  and proclamation != ''">
+                proclamation=#{proclamation}
+            </if>
+            where id=#{id}
+        </trim>
+    </update>
+    <!--上传课件-->
+    <insert id="teacherFileAdd"  parameterType="Chapter">
+        insert
+        into
+        courseware(chapterId,src,filename)
+        values
+        ( #{chapterId},#{src},#{filename})
+    </insert>
+    <select id="teacherByCourseWare"  resultType="com.xiaodanhuang.entity.courseware">
+        <!-- 章节教学文件显示 -->
+        select
+        *
+        from
+       courseware
+        where
+        chapterId= #{chapterId}
+    </select>
+    <delete id="teacherWareDelete" parameterType="int" >
+        DELETE
+        from
+        courseware
+        where
+        id=#{id}
+    </delete>
+    <!--上传作业-->
+    <insert id="teacherWorkAdd"  parameterType="homework">
+        insert
+        into
+        homework(courseId,src,filename)
+        values
+        (#{courseId},#{src},#{filename})
+    </insert>
+    <select id="teacherByWork"  resultType="com.xiaodanhuang.entity.homework">
+        <!-- 章节教学文件显示 -->
+        select   homework.id,course.courseName,homework.filename,homework.src
+        from homework,course
+        where course.teacherNum=#{teacherNum}
+        and homework.courseId=course.id
+    </select>
+    <delete id="teacherWorkDelete" parameterType="int" >
+        DELETE
+        from
+        homework
+        where
+        id=#{id}
+    </delete>
+</mapper>

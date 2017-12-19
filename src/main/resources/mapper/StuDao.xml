@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaodanhuang.dao.StuDao">
+    <select id="stuCourse"  resultType="com.xiaodanhuang.entity.Course">
+        <!-- 学生端模块课程列表资源综合排序 -->
+      SELECT
+      id,
+      courseName,
+      courseStu,
+      courseTeacher,
+      courseTime,
+      src
+      FROM
+      course
+    </select>
+    <select id="stuMyCourse"  resultType="com.xiaodanhuang.entity.Course">
+      <!-- 学生端模块课程列表资源综合排序 -->
+        SELECT
+        course.id,
+        course.courseName,
+        course.courseStu,
+        course.courseTeacher,
+        course.courseTime,
+        course.src
+        FROM
+        course,seleCourse where seleCourse.stuId=#{stuId} and seleCourse.courseId=course.id
+    </select>
+    <select id="stuCourseByTime"  resultType="com.xiaodanhuang.entity.Course">
+     <!-- 学生端模块课程列表资源最新排序 -->
+    SELECT
+    id,
+    courseName,
+    courseStu,
+    courseTeacher,
+    courseTime,
+    teacherNum,
+    src
+    FROM
+    course
+    ORDER BY  courseTime DESC
+    </select>
+    <select id="stuCourseByStu"  resultType="com.xiaodanhuang.entity.Course">
+        <!-- 学生端模块课程列表资源最新排序 -->
+        SELECT
+        id,
+        courseName,
+        courseStu,
+        courseTeacher,
+        courseTime,
+        teacherNum,
+        src
+        FROM
+        course
+        ORDER BY courseStu DESC
+    </select>
+    <insert id="stuCommentAdd"  parameterType="Comment">
+        insert
+        into
+        comment(courseId,hostId,comment,commentTime)
+        values
+        ( #{courseId}, #{hostId},#{comment},#{commentTime})
+    </insert>
+    <select id="stuCourseByComment"  resultType="com.xiaodanhuang.entity.QueryComment">
+        <!-- 学生端模块课程列表资源最新排序 -->
+        select comment.id,comment.hostId,student.username,student.avater ,comment.comment, comment.commentTime
+        from  student, course ,comment
+        where comment.courseId=#{courseId}   and comment.hostId=student.id
+        GROUP BY comment.id
+    </select>
+    <select id="stuCourseByGuest"  resultType="com.xiaodanhuang.entity.QueryComment">
+        select student.username,guest.comment
+        from  guest,student
+        where guest.commentId =#{commentId} and guest.stuId=student.id
+    </select>
+    <insert id="stuGuestAdd"  parameterType="Student">
+        insert
+        into
+        guest(commentId,stuId,comment)
+        values
+        (#{commentId},#{stuId},#{comment})
+    </insert>
+    <insert id="stuCourseAdd"  parameterType="int">
+        insert
+        into
+        SeleCourse(stuId,courseId)
+        values
+        (#{stuId},#{courseId})
+    </insert>
+    <select id="stuCourseWork"  resultType="com.xiaodanhuang.entity.homework">
+        select homework.id ,homework.filename,course.courseName,homework.src
+        from homework ,course,SeleCourse
+        where SeleCourse.stuId=#{stuId}
+        and SeleCourse.courseId=homework.courseId
+        and SeleCourse.courseId=course.id
+        GROUP BY homework.id
+    </select>
+    <select id="stuCourseQuery"  resultType="com.xiaodanhuang.entity.homework">
+        select * from SeleCourse where  courseId=#{courseId} and stuId=#{stuId}
+    </select>
+    <select id="stuTeacherChat"  resultType="com.xiaodanhuang.entity.Course">
+       select course.teacherNum,course.courseTeacher
+         from SeleCourse,course where SeleCourse.stuId=#{stuId}  and SeleCourse.courseId=course.id
+
+    </select>
+</mapper>

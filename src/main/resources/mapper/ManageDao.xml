@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaodanhuang.dao.ManageDao">
+    <insert id="manageCourseAdd"  parameterType="Course">
+        <!-- 管理员模块课程单条增加 -->
+        insert
+        into
+        course(id,courseName,category,teacherNum,courseTeacher,courseTime)
+        values
+        (#{id}, #{courseName}, #{category},#{teacherNum},#{courseTeacher},#{courseTime})
+    </insert>
+    <delete id="manageCourseDelete" parameterType="int" >
+        <!-- 管理员模块课程单条删除 -->
+        DELETE
+        from
+        course
+        where
+        id=#{id}
+    </delete>
+    <update id="manageCourseUpdate" parameterType="Course">
+        <!-- 管理员模块课程单条修改 -->
+        UPDATE
+        course
+        <trim prefix="SET" suffixOverrides=",">
+            <if  test="courseName != null  and courseName != ''">
+                courseName=#{courseName},
+            </if>
+            <if  test="category != null  and category != ''">
+                category=#{category},
+            </if>
+            <if  test="teacherNum != null and teacherNum!=0">
+                teacherNum=#{teacherNum},
+            </if>
+            <if  test="courseTeacher != null and courseTeacher != ''">
+                courseTeacher=#{courseTeacher},
+            </if>
+            <if  test="courseTime != null and courseTime != ''">
+                courseTime=#{courseTime}
+            </if>
+            where id=#{id}
+        </trim>
+    </update>
+    <select id="manageByCourse"  resultType="com.xiaodanhuang.entity.Course">
+        <!-- 管理员模块课程显示资源 -->
+        SELECT
+        id,
+        courseName,
+        category,
+        courseStu,
+        courseTeacher,
+        courseTime,
+        teacherNum
+        FROM
+        course
+    </select>
+    <insert id="manageTeacherAdd"  parameterType="Teacher">
+        <!-- 管理员模块教师资源单条添加 -->
+        insert
+        into
+        teacher(id,username,time) values(#{id},#{username},#{time})
+    </insert>
+    <delete id="manageTeacherDelete" parameterType="int" >
+        <!-- 管理员模块教师资源单条删除 -->
+        DELETE
+        from
+        teacher
+        where
+        id=#{id}
+    </delete>
+    <update id="manageTeacherUpdate" parameterType="Course">
+        <!-- 管理员模块教师资源单条更改 -->
+        UPDATE
+        teacher
+        <trim prefix="SET" suffixOverrides=",">
+            <if  test="username != null  and username != ''">
+                username=#{username},
+            </if>
+            <if  test="time != null and time != ''">
+                time=#{time}
+            </if>
+            where id=#{id}
+        </trim>
+    </update>
+    <select id="manageTeacher"  resultType="com.xiaodanhuang.entity.Teacher">
+        <!-- 管理员模块教师显示资源-->
+        SELECT
+        id,
+        username,
+        time
+        FROM
+        teacher
+    </select>
+    <select id="manageStudent"  resultType="com.xiaodanhuang.entity.Student">
+        <!-- 管理员模块学生显示资源 -->
+        SELECT
+        *
+        FROM
+        student
+    </select>
+    <insert id="manageStudentAdd"  parameterType="Student">
+        <!-- 管理员模块学生资源单条添加 -->
+        insert
+        into
+        student(id,username,schoolTime) values(#{id}, #{username},#{schoolTime})
+    </insert>
+    <delete id="manageStudentDelete" parameterType="int" >
+        <!-- 管理员模块学生资源单条删除 -->
+        DELETE
+        from
+        student
+        where
+        id=#{id}
+    </delete>
+    <update id="manageStudentUpdate" parameterType="Course">
+        <!-- 管理员模块学生资源单条修改 -->
+        UPDATE
+        student
+        <trim prefix="SET" suffixOverrides=",">
+            <if  test="username != null  and username != ''">
+                username=#{username},
+            </if>
+            <if  test="schoolTime != null and schoolTime != ''">
+                schoolTime=#{schoolTime}
+            </if>
+            where id=#{id}
+        </trim>
+    </update>
+    <update id="managePasswordUpdate" parameterType="Course">
+        <!-- 管理员模块学生资源单条修改 -->
+        UPDATE
+        student
+        <trim prefix="SET" suffixOverrides=",">
+            <if  test="username != null  and username != ''">
+                username=#{username},
+            </if>
+            <if  test="schoolTime != null and schoolTime != ''">
+                schoolTime=#{schoolTime}
+            </if>
+            where id=#{id}
+        </trim>
+    </update>
+</mapper>
